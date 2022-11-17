@@ -1,6 +1,16 @@
 const connect = require('./knex')
 const bcrypt = require('bcryptjs')
 const { validationResult } = require('express-validator')
+const jwt = require('jsonwebtoken')
+const {secret} = require('./config')
+
+const genereteAccessToken = (id, roles) => {
+    const payload = {
+        id,
+        roles
+    }
+    return jwt.sign(payload, secret, {expiresIn: "24h"})
+}
 
 class authController {
     async registration(req, res) {
@@ -27,7 +37,28 @@ class authController {
 
     async login(req, res) {
         try {
+            const {username, password} = req.body
+            const candidate = await connect.select("*").from("user").where("username", "=", username)
+            if (candidate.length == 0) {
+                return res.status(400).json({message: 'Такого не существует'})
+            }
+            console.log(candidate)
+            const validPassword = bcrypt.compareSync(password, candidate[0].password)
+            if (!validPassword) {
+                return res.status(400).json({message: 'Не верный пароль'})
+            }
+            const token = genereteAccessToken(candidate[0].id, candidate[0].roles)
+            return res.json({token})
+        } catch(e) {
+            console.log(e)
+            res.status(400).json({message: 'Login error'})
+        }
+    }
 
+    async getUsers(req, res) {
+        try {
+            const users = await connect.select("*").from("user")
+            return res.status(200).json(users)
         } catch(e) {
             console.log(e)
         }
