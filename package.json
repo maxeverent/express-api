@@ -18,5 +18,8 @@
     "knex": "^2.3.0",
     "nodemon": "^2.0.20",
     "sqlite3": "^5.1.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }

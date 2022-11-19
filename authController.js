@@ -4,10 +4,11 @@ const { validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 const {secret} = require('./config')
 
-const genereteAccessToken = (id, roles) => {
+const genereteAccessToken = (id, username, roles) => {
     const payload = {
         id,
-        roles
+        roles,
+        username,
     }
     return jwt.sign(payload, secret, {expiresIn: "24h"})
 }
@@ -17,7 +18,7 @@ class authController {
         try {
             const errors = validationResult(req)
             if (!(errors.isEmpty())) {
-                return res.status(400).json({message: "ты еблан", errors})
+                return res.status(400).json({message: "Err", errors})
             }
             const {username, password} = req.body
             const candidate = await connect.select("*").from("user").where("username", "=", username)
@@ -47,7 +48,7 @@ class authController {
             if (!validPassword) {
                 return res.status(400).json({message: 'Не верный пароль'})
             }
-            const token = genereteAccessToken(candidate[0].id, candidate[0].roles)
+            const token = genereteAccessToken(candidate[0].id, candidate[0].username, candidate[0].roles)
             return res.json({token})
         } catch(e) {
             console.log(e)
