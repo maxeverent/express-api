@@ -19,7 +19,7 @@ module.exports = function (roles) {
                 hasRole = true
             }
             if (!hasRole) {
-                return res.status(403).json({message: "нет прав"})
+                return res.status(200).json({message: "нет прав"})
             }
             next()
         } catch(e) {
