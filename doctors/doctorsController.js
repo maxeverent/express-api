@@ -30,7 +30,7 @@ class doctorsController {
     async put(req, res) {
         try {
             const {fname, sname, patronymic, speciality, cabinet_id} = req.body
-            const {id} = req.params
+            const {id} = req.body
             const doctor = {fname, sname, patronymic, speciality, cabinet_id}
             await connect("doctor").where("id", id).update(doctor)
             res.header("Access-Control-Allow-Origin", "*")
