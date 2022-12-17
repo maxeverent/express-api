@@ -15,8 +15,8 @@ class doctorsController {
 
     async create(req, res) {
         try {
-            const {speciality, date} = req.body
-            const exam = {speciality, date}
+            const {speciality, date, auth_token} = req.body
+            const exam = {speciality, date, auth_token}
             await connect("exam").insert(exam)
             res.header("Access-Control-Allow-Origin", "*")
             return res.status(200).json(exam)
