@@ -7,6 +7,7 @@ const cabinetsRouter = require('./cabinets/cabinetsRouter')
 const doctorsRouter = require('./doctors/doctorsRouter')
 const receptionsRouter = require('./reception/receptionsRouter')
 const specialityRouter = require('./speciality/specialityRouter')
+const examRouter = require('./exam/examRouter')
 
 const PORT = 5000
 
@@ -23,5 +24,6 @@ app.use("/cabinet", cabinetsRouter)
 app.use("/doctor", doctorsRouter)
 app.use("/reception", receptionsRouter)
 app.use("/speciality", specialityRouter)
+app.use("/exam", examRouter)
 
 app.listen(PORT, () => {console.log('working')})
